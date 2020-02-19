@@ -1,0 +1,89 @@
+---
+title: "Untitled"
+author: "Yang Zhaoqin"
+date: "2019/12/27"
+output: html_document
+---
+```{r}
+#first library a few packages that we will use during the practical
+#note you may need to install them first...
+library(spatstat)
+library(sp)
+library(rgeos)
+library(maptools)
+library(GISTools)
+library(tmap)
+library(sf)
+library(geojson)
+library(geojsonio)
+library(tmaptools)
+library(rgdal)
+library(raster)
+```
+```{r}
+##First, get the London Wards
+London_wards <- st_read("F:/Crime Porject/London/London_Ward.shp")
+```
+坐标系还没有，需要设置一下
+```{r}
+st_crs(London_wards)
+```
+```{r}
+
+```
+
+```{r}
+summary(London_wards)
+```
+```{r}
+qtm(London_wards)
+```
+
+
+```{r}
+##Now get the location of all crimes in the City
+crime_data <- read.csv("F:/Crime Porject/dataset_filterd.csv")
+summary(crime_data)
+```
+```{r}
+head(crime_data)
+```
+```{r}
+str(crime_data)
+```
+```{r}
+library(rgdal)
+```
+```{r}
+#删除缺失值
+xy <- crime_data[!is.na(crime_data$Longitude),]
+```
+
+```{r}
+#创建点坐标
+coordinates(xy)<-~Longitude+Latitude
+plot(xy, 
+     main="Map of Plot Locations")
+```
+```{r}
+# make the UTM cols spatial (X/Easting/lon, Y/Northing/lat)
+xy.SP <- st_as_sf(xy, coords = c("Longitude", "Latitude"), crs = 4326)
+```
+```{r}
+xy.SP
+```
+
+```{r}
+st_crs(xy.SP)
+```
+
+```{r}
+crime_london <- xy.SP[London_wards,]
+```
+
+```{r}
+
+```
+
+
+
