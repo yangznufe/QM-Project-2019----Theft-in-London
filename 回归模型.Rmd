@@ -1,0 +1,49 @@
+---
+title: "多元回归"
+author: "Yang Zhaoqin"
+date: "2019/12/29"
+output: html_document
+---
+
+```{r}
+df <- read.csv('F:/Crime Porject/losa_selected2.csv')
+df
+```
+
+```{r}
+summary(df)
+```
+
+```{r}
+names(df)
+```
+```{r}
+fit1 <- lm(theft_rate ~ X2011.Census.Population.Age.Structure.All.Ages + Population.Density.Area..Hectares.. + Country.of.Birth...Not.United.Kingdom.2011 +  Economic.Activity.Unemployment.Rate.2011 +  Public.Transport.Accessibility.Levels..2014..Average.Score.  + Household.Income..2011.12.Median.Annual.Household.Income.estimate..., data=df)
+```
+```{r}
+summary(fit1)
+```
+```{r}
+df[,'log_y']=log(df[,'theft_rate'])
+df
+```
+```{r}
+summary(df)
+```
+```{r}
+fit <- lm(log_y ~ X2011.Census.Population.Age.Structure.All.Ages + Population.Density.Area..Hectares.. + Country.of.Birth...Not.United.Kingdom.2011 +  Economic.Activity.Unemployment.Rate.2011 +  Public.Transport.Accessibility.Levels..2014..Average.Score.  + Household.Income..2011.12.Median.Annual.Household.Income.estimate..., data=df)
+summary(fit)
+```
+```{r}
+library(tidyverse)
+library(caret)
+library(leaps)
+library(MASS)
+# Fit the full model 
+full.model <- lm(log_y ~ X2011.Census.Population.Age.Structure.All.Ages + Population.Density.Area..Hectares.. + Country.of.Birth...Not.United.Kingdom.2011 +  Economic.Activity.Unemployment.Rate.2011 +  Public.Transport.Accessibility.Levels..2014..Average.Score.  + Household.Income..2011.12.Median.Annual.Household.Income.estimate..., data = df)
+# Stepwise regression model
+step.model <- stepAIC(full.model, direction = "both", 
+                      trace = FALSE)
+summary(step.model)
+```
+

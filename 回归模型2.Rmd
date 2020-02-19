@@ -1,0 +1,75 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r}
+df <- read.csv('N:/crime data/lsoa_data_0102_2.csv')
+df
+```
+```{r}
+library(stringr)
+sum(str_detect(df$Names, "^Camden")) #fruit的元素是否以a开头
+```
+```{r}
+df_camden <- df[1:133,]
+df_camden[,'log_y']=log(df_camden[,'theft_rate'])
+newdata1<-df_camden[complete.cases(df_camden$log_y),]
+newdata1[is.na(newdata1)]<-0
+newdata1
+```
+```{r}
+fit1 <- lm(log_y ~ X2011.Census.Population.Age.Structure.All.Ages +
+            Qualifications...No.qualifications.2011 + Public.Transport.Accessibility.Levels..2014..Average.Score.
+           + Religious.Buildings + Medical.Care + Cultural.Facility +Education
+            
+            , data=newdata1)
+summary(fit1)
+```
+```{r}
+plot(fit1)
+```
+
+```{r}
+names(df1)
+```
+```{r}
+df[,'log_y']=log(df[,'theft_rate'])
+
+```
+```{r}
+df1 = df1[,-8]
+```
+```{r}
+library(psych)
+pairs.panels(df1[,2:15], 
+             method = "pearson", # correlation method
+             hist.col = "#00AFBB",
+             density = TRUE,  # show density plots
+             ellipses = TRUE # show correlation ellipses
+             )
+```
+
+
+```{r}
+
+newdata<-df1[complete.cases(df1$log_y),]
+newdata[is.na(newdata)]<-0
+newdata
+```
+```{r}
+fit <- lm(log_y ~ X2011.Census.Population.Age.Structure.All.Ages +
+            Qualifications...No.qualifications.2011 + Public.Transport.Accessibility.Levels..2014..Average.Score.
+           + Religious.Buildings + Medical.Care + Cultural.Facility +Education
+            
+            , data=newdata)
+summary(fit)
+```
+```{r}
+plot(fit)
+```
+
+```{r}
+vif(fit)
+```
+
